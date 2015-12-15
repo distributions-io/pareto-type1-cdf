@@ -7,7 +7,7 @@ Cumulative Distribution Function
 The [cumulative distribution function](https://en.wikipedia.org/wiki/Cumulative_distribution_function) for a [Pareto (Type I)](https://en.wikipedia.org/wiki/Pareto_distribution) random variable is
 
 <div class="equation" align="center" data-raw-text="F(x)= 1 - \left( \frac{\beta}{x} \right)^\alpha \text{for }x \ge \beta" data-equation="eq:cdf">
-	<img src="" alt="Cumulative distribution function for a Pareto (Type I) distribution.">
+	<img src="https://cdn.rawgit.com/distributions-io/pareto-type1-cdf/a6fa6ecbb6ef1b4ad14c399413f7b588e046f433/docs/img/eqn.svg" alt="Cumulative distribution function for a Pareto (Type I) distribution.">
 	<br>
 </div>
 
