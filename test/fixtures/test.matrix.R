@@ -1,10 +1,11 @@
 options( digits = 16 )
 library( jsonlite )
+library( VGAM )
 
 alpha = 1
 beta = 1
-x = 0:24
-y = pparetoI( x, alpha, beta )
+x = 0:24 + 1
+y = pparetoI( x, beta, alpha )
 
 cat( y, sep = ",\n" )
 

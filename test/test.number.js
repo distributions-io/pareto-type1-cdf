@@ -48,6 +48,11 @@ describe( 'number cdf', function tests() {
 		}
 	});
 
+	it( 'should return 0 for a value smaller than `beta` parameter', function test() {
+		assert.strictEqual( cdf( -2, 2, 1 ), 0 );
+		assert.strictEqual( cdf( 0.9, 2, 1 ), 0 );
+	});
+
 	it( 'should return `NaN` if provided `NaN` as input', function test() {
 		assert.isTrue( isnan( cdf( NaN, alpha, beta ) ) );
 	});
