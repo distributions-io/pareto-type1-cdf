@@ -2,16 +2,16 @@ Cumulative Distribution Function
 ===
 [![NPM version][npm-image]][npm-url] [![Build Status][travis-image]][travis-url] [![Coverage Status][codecov-image]][codecov-url] [![Dependencies][dependencies-image]][dependencies-url]
 
-> [Pareto](https://en.wikipedia.org/wiki/Pareto_distribution) distribution [cumulative distribution function](https://en.wikipedia.org/wiki/Cumulative_distribution_function).
+> [Pareto (Type I)](https://en.wikipedia.org/wiki/Pareto_distribution) distribution [cumulative distribution function](https://en.wikipedia.org/wiki/Cumulative_distribution_function).
 
-The [cumulative distribution function](https://en.wikipedia.org/wiki/Cumulative_distribution_function) for a [Pareto](https://en.wikipedia.org/wiki/Pareto_distribution) random variable is
+The [cumulative distribution function](https://en.wikipedia.org/wiki/Cumulative_distribution_function) for a [Pareto (Type I)](https://en.wikipedia.org/wiki/Pareto_distribution) random variable is
 
-<div class="equation" align="center" data-raw-text="" data-equation="eq:cdf">
-	<img src="" alt="Cumulative distribution function for a Pareto distribution.">
+<div class="equation" align="center" data-raw-text="F(x)= 1 - \left( \frac{\beta}{x} \right)^\alpha \text{for }x \ge \beta" data-equation="eq:cdf">
+	<img src="" alt="Cumulative distribution function for a Pareto (Type I) distribution.">
 	<br>
 </div>
 
-where `alpha` is the shape parameter and `beta` is the scale parameter.
+and zero otherwise. In the equation, `alpha > 0` is the shape parameter and `beta > 0` is the scale parameter.
 
 ## Installation
 
@@ -30,7 +30,7 @@ var cdf = require( 'distributions-pareto-type1-cdf' );
 
 #### cdf( x[, options] )
 
-Evaluates the [cumulative distribution function](https://en.wikipedia.org/wiki/Cumulative_distribution_function) for the [Pareto](https://en.wikipedia.org/wiki/Pareto_distribution) distribution. `x` may be either a [`number`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number), an [`array`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array), a [`typed array`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Typed_arrays), or a [`matrix`](https://github.com/dstructs/matrix).
+Evaluates the [cumulative distribution function](https://en.wikipedia.org/wiki/Cumulative_distribution_function) for the [Pareto (Type I)](https://en.wikipedia.org/wiki/Pareto_distribution) distribution. `x` may be either a [`number`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number), an [`array`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array), a [`typed array`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Typed_arrays), or a [`matrix`](https://github.com/dstructs/matrix).
 
 ``` javascript
 var matrix = require( 'dstructs-matrix' ),
@@ -40,15 +40,15 @@ var matrix = require( 'dstructs-matrix' ),
 	i;
 
 out = cdf( 1 );
-// returns
+// returns 0
 
 x = [ -4, -2, 0, 2, 4 ];
 out = cdf( x );
-// returns [...]
+// returns [ 0, 0, 0, 0.5, 0.75 ]
 
 x = new Float32Array( x );
 out = cdf( x );
-// returns Float64Array( [...] )
+// returns Float64Array( [0,0,0,0.5,0.75] )
 
 x = new Float32Array( 6 );
 for ( i = 0; i < 6; i++ ) {
@@ -63,10 +63,11 @@ mat = matrix( x, [3,2], 'float32' );
 
 out = cdf( mat );
 /*
-	[
-
-	   ]
+	[ 0 0
+	  0 0
+	  0 0.5 ]
 */
+
 ```
 
 The function accepts the following `options`:
@@ -79,16 +80,17 @@ The function accepts the following `options`:
 *	__path__: [deepget](https://github.com/kgryte/utils-deep-get)/[deepset](https://github.com/kgryte/utils-deep-set) key path.
 *	__sep__: [deepget](https://github.com/kgryte/utils-deep-get)/[deepset](https://github.com/kgryte/utils-deep-set) key path separator. Default: `'.'`.
 
-A [Pareto](https://en.wikipedia.org/wiki/Pareto_distribution) distribution is a function of 2 parameter(s): `alpha`(shape parameter) and `beta`(scale parameter). By default, `alpha` is equal to `1` and `beta` is equal to `1`. To adjust either parameter, set the corresponding option(s).
+A [Pareto](https://en.wikipedia.org/wiki/Pareto_distribution) distribution is a function of two parameters: `alpha > 0`(shape parameter) and `beta > 0`(scale parameter). By default, `alpha` is equal to `1` and `beta` is equal to `1`. To adjust either parameter, set the corresponding option.
 
 ``` javascript
 var x = [ -4, -2, 0, 2, 4 ];
 
 var out = cdf( x, {
 	'alpha': 7,
-	'beta': 8
+	'beta': 1.5
 });
-// returns [...]
+// returns [ 0, 0, 0, ~0.867, ~0.999 ]
+
 ```
 
 For non-numeric `arrays`, provide an accessor `function` for accessing `array` values.
@@ -109,7 +111,8 @@ function getValue( d, i ) {
 var out = cdf( data, {
 	'accessor': getValue
 });
-// returns [...]
+// returns [ 0, 0, 0, 0.5, 0.75 ]
+
 ```
 
 
@@ -130,11 +133,11 @@ var out = cdf( data, {
 });
 /*
 	[
-		{'x':[0,]},
-		{'x':[1,]},
-		{'x':[2,]},
-		{'x':[3,]},
-		{'x':[4,]},
+		{'x':[0,0]},
+		{'x':[1,0]},
+		{'x':[2,0]},
+		{'x':[3,0.5]},
+		{'x':[4,0.75]},
 	]
 */
 
@@ -152,13 +155,14 @@ x = new Float64Array( [-4,-2,0,2,4] );
 out = cdf( x, {
 	'dtype': 'float32'
 });
-// returns Float32Array( [...] )
+// returns Float32Array( [0,0,0,0.5,0.75] )
 
 // Works for plain arrays, as well...
 out = cdf( [-4,-2,0,2,4], {
 	'dtype': 'float32'
 });
-// returns Float32Array( [...] )
+// returns Float32Array( [0,0,0,0.5,0.75] )
+
 ```
 
 By default, the function returns a new data structure. To mutate the input data structure (e.g., when input values can be discarded or when optimizing memory usage), set the `copy` option to `false`.
@@ -175,7 +179,7 @@ x = [ -4, -2, 0, 2, 4 ];
 out = cdf( x, {
 	'copy': false
 });
-// returns [...]
+// returns [ 0, 0, 0, 0.5, 0.75 ]
 
 bool = ( x === out );
 // returns true
@@ -195,9 +199,9 @@ out = cdf( mat, {
 	'copy': false
 });
 /*
-	[
-
-	   ]
+	[ 0 0
+	  0 0
+	  0 0.5 ]
 */
 
 bool = ( mat === out );
@@ -364,7 +368,7 @@ Copyright &copy; 2015. The [Compute.io](https://github.com/compute-io) Authors.
 [travis-image]: http://img.shields.io/travis/distributions-io/pareto-type1-cdf/master.svg
 [travis-url]: https://travis-ci.org/distributions-io/pareto-type1-cdf
 
-[codecov-image]: https://img.shields.io/codecov/github/distributions-io/pareto-type1-cdf/master.svg
+[codecov-image]: https://img.shields.io/codecov/c/github/distributions-io/pareto-type1-cdf/master.svg
 [codecov-url]: https://codecov.io/github/distributions-io/pareto-type1-cdf?branch=master
 
 [dependencies-image]: http://img.shields.io/david/distributions-io/pareto-type1-cdf.svg
